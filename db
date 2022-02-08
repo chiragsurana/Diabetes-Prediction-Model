@@ -1,0 +1,57 @@
+import pandas as pd
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+df=pd.read_csv('E:/pandas/pima-data.csv')
+df=df.rename(columns={'diastolic_bp':'bp','glucose_conc':'glucose'})
+df['diabetes']=df['diabetes']*1
+df.fillna(0)
+t= np.linspace(-1000000000,1000000000,100)
+fx = 1/(1+ np.exp(-t))
+plt.plot(t, t*t)
+print(df[(df['diabetes']==1)  & (df['age'] > 50)].count())
+corel = df.corr()
+print(corel.index)
+from sklearn.metrics import accuracy_score
+plt.figure(figsize=(20,20))
+sns.scatterplot(x='insulin',y='glucose',data=df[df['insulin']>0] )
+sns.heatmap(df.corr(),annot= True  )
+sns.catplot(y='diabetes',x='insulin',data=df)
+plt.xticks(np.arange(min(df['insulin']), 400,10))
+sns.relplot(y='diabetes',x='insulin',data= df)
+plt.show()
+x=df.drop('diabetes',axis=1)
+y=df['diabetes']
+x_train , x_test,y_train, y_test = train_test_split(x,y,test_size=0.25)
+model = LogisticRegression()
+model.fit(x_train,y_train)
+pred=model.predict(x_test)
+predi=model.predict(x_train)
+print(accuracy_score(y_train,predi))
+score_xn=accuracy_score(y_test,pred,normalize=True)
+score_yt=accuracy_score(pred,y_test,normalize=True)
+score_yn= accuracy_score(y_test,pred,normalize=True)
+check=np.array([6,148,72,35	,0,	33.6,0.627	,50,	1.379])
+plt.hist(data=df[(df['insulin']<200) &(df['insulin']>0)],x='insulin',stacked=44 )
+
+plt.xticks(rotation=90)
+plt.title = "Distribution of shares"
+plt.xlabel='shares'
+plt.ylabel='count'
+plt.xticks1 = range(0, 15000, 200)
+plt.show()
+che=check.reshape(-1,9)
+print(che)
+chiak=model.predict(che)
+print(chiak)
+print(score_yt)
+from sklearn.svm import SVC , SVR
+
+modea= SVC(kernel='linear')
+modea.fit(x_train,y_train)
+modea_p= modea.predict(x_test)
+print(accuracy_score(y_test,modea_p))
+
